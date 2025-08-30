@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login with 6-Semester Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .box {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      width: 420px;
+      max-height: 95vh;
+      overflow-y: auto;
+    }
+    h2,h3 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+    button:hover {
+      background: #3730a3;
+    }
+    .result {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 12px;
+      font-weight: bold;
+      color: green;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .calc-box {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+  <!-- Login Box -->
+  <div class="box" id="loginBox">
+    <h2>Student Login</h2>
+    <form id="loginForm">
+      <div class="error" id="errorMsg"></div>
+      
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter your username">
+      
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password">
+      
+      <button type="submit">Login</button>
+    </form>
+    <p style="text-align:center;font-size:13px;color:#555;">Demo login: <b>student / 1234</b></p>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="box" id="dashboard" style="display:none;">
+    <h2>Welcome 🎓</h2>
+
+    <!-- Student Info Form -->
+    <form id="studentForm">
+      <label for="sname">Name</label>
+      <input type="text" id="sname" placeholder="Enter your name" required>
+      
+      <label for="sage">Age</label>
+      <input type="number" id="sage" placeholder="Enter your age" required>
+      
+      <label for="sgender">Gender</label>
+      <input type="text" id="sgender" placeholder="Enter gender" required>
+      
+      <label for="sbranch">Branch</label>
+      <input type="text" id="sbranch" placeholder="Enter branch" required>
+      
+      <button type="button" onclick="saveStudentDetails()">Save Details</button>
+    </form>
+
+    <!-- Display Student Info -->
+    <div id="studentDetails" style="display:none;">
+      <h3>Student Profile</h3>
+      <p><b>Name:</b> <span id="studentName"></span></p>
+      <p><b>Age:</b> <span id="studentAge"></span></p>
+      <p><b>Gender:</b> <span id="studentGender"></span></p>
+      <p><b>Branch:</b> <span id="studentBranch"></span></p>
+    </div>
+
+    <!-- 6-Semester Calculator -->
+    <div class="calc-box">
+      <h3>📊 6-Semester Percentage Calculator</h3>
+      <div id="semInputs">
+        <label>Semester 1 Marks</label>
+        <input type="number" id="sem1" placeholder="Enter obtained marks (Sem 1)">
+        
+        <label>Semester 2 Marks</label>
+        <input type="number" id="sem2" placeholder="Enter obtained marks (Sem 2)">
+        
+        <label>Semester 3 Marks</label>
+        <input type="number" id="sem3" placeholder="Enter obtained marks (Sem 3)">
+        
+        <label>Semester 4 Marks</label>
+        <input type="number" id="sem4" placeholder="Enter obtained marks (Sem 4)">
+        
+        <label>Semester 5 Marks</label>
+        <input type="number" id="sem5" placeholder="Enter obtained marks (Sem 5)">
+        
+        <label>Semester 6 Marks</label>
+        <input type="number" id="sem6" placeholder="Enter obtained marks (Sem 6)">
+      </div>
+
+      <label>Total Marks for Each Semester</label>
+      <input type="number" id="totalMarks" placeholder="Enter total marks per semester">
+
+      <button type="button" onclick="calculateOverallPercentage()">Calculate Overall %</button>
+      <div class="result" id="percentageResult"></div>
+    </div>
+
+    <button style="margin-top:15px;" onclick="logout()">Logout</button>
+  </div>
+
+  <script>
+    const demoUser = { username: "student", password: "1234" };
+
+    // Handle login
+    document.getElementById("loginForm").addEventListener("submit", function(event){
+      event.preventDefault();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorMsg = document.getElementById("errorMsg");
+
+      if(username === demoUser.username && password === demoUser.password){
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+      } else {
+        errorMsg.textContent = "❌ Invalid username or password.";
+      }
+    });
+
+    // Save Student Details
+    function saveStudentDetails(){
+      document.getElementById("studentName").textContent = document.getElementById("sname").value;
+      document.getElementById("studentAge").textContent = document.getElementById("sage").value;
+      document.getElementById("studentGender").textContent = document.getElementById("sgender").value;
+      document.getElementById("studentBranch").textContent = document.getElementById("sbranch").value;
+      document.getElementById("studentDetails").style.display = "block";
+    }
+
+    // 6-Semester Percentage Calculation
+    function calculateOverallPercentage(){
+      let totalObtained = 0;
+      const totalMarksPerSem = parseFloat(document.getElementById("totalMarks").value);
+      if(isNaN(totalMarksPerSem) || totalMarksPerSem <= 0){
+        document.getElementById("percentageResult").style.color = "red";
+        document.getElementById("percentageResult").textContent = "⚠️ Enter valid total marks per semester.";
+        return;
+      }
+
+      for(let i=1; i<=6; i++){
+        let marks = parseFloat(document.getElementById("sem"+i).value);
+        if(isNaN(marks) || marks < 0 || marks > totalMarksPerSem){
+          document.getElementById("percentageResult").style.color = "red";
+          document.getElementById("percentageResult").textContent = "⚠️ Enter valid marks for all semesters.";
+          return;
+        }
+        totalObtained += marks;
+      }
+
+      let overallPercentage = (totalObtained / (totalMarksPerSem * 6)) * 100;
+      document.getElementById("percentageResult").style.color = "green";
+      document.getElementById("percentageResult").textContent = "Overall Percentage: " + overallPercentage.toFixed(2) + "%";
+    }
+
+    // Logout
+    function logout(){
+      document.getElementById("dashboard").style.display = "none";
+      document.getElementById("loginBox").style.display = "block";
+      document.getElementById("loginForm").reset();
+      document.getElementById("studentForm").reset();
+      document.getElementById("studentDetails").style.display = "none";
+      document.getElementById("percentageResult").textContent = "";
+    }
+  </script>
+</body>
+</html>
